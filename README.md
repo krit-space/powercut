@@ -9,3 +9,6 @@
 Tech used:
 - BeautifulSoup for web scrape
 - PowerBI
+
+
+https://krit-space.github.io/powercut/
