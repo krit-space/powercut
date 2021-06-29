@@ -1,4 +1,4 @@
-# All Power Outrages around the island in one place.
+# All Power Outrages around Mauritius in one place.
 
 #Clean
 
