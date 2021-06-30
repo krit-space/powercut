@@ -18,45 +18,84 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
 </style>
 
 <head>
+
     <script>
-    function screenshot(){
-        document.getElementById('report').contentWindow.print();
+    function reload(){
+      location.reload();
     }
+
+
+  function getRawInfo() {
+  return fetch('https://sheltered-hollows-60821.herokuapp.com')
+    .then(function(response) {
+      return response.text();
+    })
+    .then(function(data) {
+      return data;
+    })
+}
+
+
+
+  async function getData(){
+    const rawData = await this.getRawInfo();
+    const result2 = rawData.replaceAll("\\n","").replaceAll("\"blackriver\":\"","").replaceAll("\",\"grandport\":\"","").replaceAll("\",\"moka\":\"","").replaceAll("\",\"plainewilhems\":\"","")
+   .replaceAll("\",\"portlouis\":\"","").replaceAll("\",\"rivieredurempart\":\"","").replaceAll("\",\"savanne\":\"","").replaceAll("\",\"rodrigues\":\"","").replaceAll("\",\"flacq\":\"","")
+   .replaceAll("\",\"pamplemousses\":\"","");
+   const result3 = result2.replaceAll("<table","<table border=\"1\"")
+                          .replaceAll("table>\"","table>")
+                          .replaceAll("\\u00e0","à")
+                          .replaceAll("\\u00e8","è")
+                          .replaceAll("\\u00e9","é")
+                          .replaceAll("\\u00e0","à")
+                          .replaceAll("\\u00e2","â>")
+                          .replaceAll("\\u2019","'");
+    const timestamp = new Date();
+    const final_result = "MIME-Version: 1.0\r\nTo: Replace With recipients <email@domain.com>\r\nSubject: Coupures/Power Outages\r\nX-Unsent: 1\r\nContent-Type: text/html; charset=\"utf-8\"\r\n\r\n" + 
+    "<html><head><meta charset='UTF-8' /></head><body> <p>Hello all,</p> Today's List: <br> "+result3+"</body></p><p>Have a nice day ahead!<p> <br><p> Generated On: "+timestamp +"</p></html>";
+ 
+    var data = new Blob([final_result], {type: 'text/plain'});
+    var textFile = window.URL.createObjectURL(data);
+
+    var link = document.getElementById('downloadlink');
+    link.href = textFile;
+    link.style.display = 'block';
+  }
+
 </script>
 </head>
 
-<body class="w3-white">
+<body class="w3-white" onload="getData();">
 
-<!-- Icon Bar (Sidebar - hidden on small screens) -->
+  <!-- Icon Bar (Sidebar - hidden on small screens) -->
 <nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center">
   <!-- Avatar image in top left corner -->
 
-  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-white">
+  <a href="javascript:reload();" class="w3-bar-item w3-button w3-padding-large w3-white" >
     <i class="fa fa-home w3-xxlarge"></i>
     <p>Home</p>
   </a>
-  <a href="#photos" class="w3-bar-item w3-button w3-padding-large w3-hover-white" onclick="screenshot();">
+  <a  class="w3-bar-item w3-button w3-padding-large w3-hover-white" download="message.eml" id="downloadlink" >
     <i class="fa fa-eye w3-xxlarge"></i>
-    <p>Screenshot</p>
+    <p>Share Powercut!</p>
+  </a>
+  <a href="https://github.com/krit-space/powercut" target="_blank" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >
+    <i class="fa fa-github w3-xxlarge"></i>
+    <p>Github</p>
+  </a>
+  <a href="https://www.linkedin.com/in/kritesh-sunghoon-286ab6128/" target="_blank" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >
+    <i class="fa fa-linkedin  w3-xxlarge"></i>
+    <p>LinkedIn</p>
   </a>
 </nav>
 
-<!-- Navbar on small screens (Hidden on medium and large screens) -->
-<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
-  <div class="w3-bar w3-white w3-opacity w3-hover-opacity-off w3-center w3-small">
-    <a href="#" class="w3-bar-item w3-button" style="width:25% !important">Home</a>
-    <a href="#photos" class="w3-bar-item w3-button" style="width:25% !important">Screenshot</a>
-  </div>
-</div>
-
 <!-- Page Content -->
 <div class="w3-padding-large" id="main">
-    <iframe width="100%" height="900" id="report" src="https://app.powerbi.com/view?r=eyJrIjoiZjE1ODRhMWYtNmY3NC00M2QzLThkNjctMDljNTg0NDY3OWEwIiwidCI6IjA3OTFmMDE5LTRkYzItNDU2Mi1iMWY1LTAzOTk4ZjFmOGNhNSJ9&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe>
-  </div>
-  
-
-<!-- END PAGE CONTENT -->
+    <iframe width="100%" height="900" id= "report" src="https://app.powerbi.com/view?r=eyJrIjoiZjE1ODRhMWYtNmY3NC00M2QzLThkNjctMDljNTg0NDY3OWEwIiwidCI6IjA3OTFmMDE5LTRkYzItNDU2Mi1iMWY1LTAzOTk4ZjFmOGNhNSJ9&pageName=ReportSection"
+     frameborder="0" allowFullScreen="true"></iframe>
 </div>
+
+
 
 </body>
 </html>
